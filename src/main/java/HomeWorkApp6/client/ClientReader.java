@@ -15,8 +15,8 @@ public class ClientReader extends Thread {
     @Override
     public void run() {
         while (true) {
-            if (read.hasNext()) {
-                String inputLine = read.next();
+            if (read.hasNextLine()) {
+                String inputLine = read.nextLine();
                 if (inputLine.equals("/end")) {
                     break;
                 }

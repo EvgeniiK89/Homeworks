@@ -33,8 +33,8 @@ public class ServerRun {
 
     public void runServer() {
         try {
-            ServerReader serverReader = new ServerReader(serverSocket);
-            ServerWriter serverWriter = new ServerWriter(serverSocket);
+            ServerReader serverReader = new ServerReader(read, write);
+            ServerWriter serverWriter = new ServerWriter(write);
 
             serverWriter.start();
             serverReader.start();
