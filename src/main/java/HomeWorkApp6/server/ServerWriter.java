@@ -9,9 +9,9 @@ public class ServerWriter extends Thread {
     private Scanner consoleReader;
     private PrintWriter write;
 
-    public ServerWriter (ServerSocket serverSocket) throws IOException {
+    public ServerWriter (PrintWriter writer) throws IOException {
         this.consoleReader = new Scanner(System.in);
-        this.write = new PrintWriter(serverSocket.accept().getOutputStream());
+        this.write = writer;
     }
 
     @Override
