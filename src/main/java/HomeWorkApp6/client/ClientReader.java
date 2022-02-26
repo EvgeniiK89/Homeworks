@@ -1,5 +1,7 @@
 package HomeWorkApp6.client;
 
+import HomeWorkApp6.client.utils.FileLogger;
+
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Scanner;
@@ -14,13 +16,16 @@ public class ClientReader extends Thread {
 
     @Override
     public void run() {
+        FileLogger fileLogger = FileLogger.getInstance();
         while (true) {
             if (read.hasNextLine()) {
                 String inputLine = read.nextLine();
                 if (inputLine.equals("/end")) {
                     break;
                 }
-                System.out.println("Server message : " + inputLine);
+                String message = "Server message : " + inputLine;
+                System.out.println(message);
+                fileLogger.logMessage(message);
             }
         }
     }
