@@ -1,54 +1,33 @@
 package HomeWorkApp6.server;
 
-import HomeWorkApp6.client.ClientReader;
-import HomeWorkApp6.client.ClientWriter;
-
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.Scanner;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ServerRun {
     private final int port = 8134;
     private ServerSocket serverSocket;
-    private Socket clientSocket;
-    private Scanner read;
-    private PrintWriter write;
-    private Scanner consoleReader;
+    private ExecutorService executorService;
 
     public ServerRun() {
         try {
             this.serverSocket = new ServerSocket(port);
+            this.executorService = Executors.newFixedThreadPool(5);
             System.out.println("Server started");
-            this.clientSocket = serverSocket.accept();
-            System.out.println("Client connected...");
-            this.read = new Scanner(clientSocket.getInputStream());
-            this.write = new PrintWriter(clientSocket.getOutputStream());
-            this.consoleReader = new Scanner(System.in);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public void runServer() {
-        try {
-            ServerReader serverReader = new ServerReader(read, write);
-            ServerWriter serverWriter = new ServerWriter(write);
-
-            serverWriter.start();
-            serverReader.start();
-
+        while (true) {
             try {
-                serverWriter.join();
-                serverReader.join();
-            } catch (InterruptedException e) {
+                executorService.submit(new ServerThread(serverSocket.accept()));
+            } catch (IOException e) {
                 e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-            System.out.println("Server left chat...");
         }
     }
+}
 
