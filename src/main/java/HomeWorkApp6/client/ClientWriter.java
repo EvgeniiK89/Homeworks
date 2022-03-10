@@ -1,5 +1,7 @@
 package HomeWorkApp6.client;
 
+import HomeWorkApp6.client.utils.FileLogger;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -16,10 +18,12 @@ public class ClientWriter extends Thread {
 
     @Override
     public void run() {
+        FileLogger fileLogger = FileLogger.getInstance();
         while (true) {
             String outputLine = consoleReader.nextLine();
             write.println(outputLine);
             write.flush();
+            fileLogger.logMessage(outputLine);
         }
     }
 
