@@ -1,5 +1,8 @@
 package HomeWorkApp6.server;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -11,13 +14,14 @@ public class ServerThread extends Thread {
     private PrintWriter write;
     private Scanner consoleReader;
     private Socket clientSocket;
+    private static final Logger LOGGER = LogManager.getLogger(ServerThread.class);
 
     public ServerThread(Socket socket) {
         this.clientSocket = socket;
     }
 
     public void run() {
-        System.out.println("New client connected!");
+        LOGGER.info("New client connected!");
         try {
             this.read = new Scanner(clientSocket.getInputStream());
             this.write = new PrintWriter(clientSocket.getOutputStream());
@@ -33,10 +37,10 @@ public class ServerThread extends Thread {
                 serverWriter.join();
                 serverReader.join();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                LOGGER.error(e.getMessage());
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage());
         }
     }
 }

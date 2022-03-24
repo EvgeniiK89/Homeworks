@@ -1,5 +1,8 @@
 package HomeWorkApp6.server;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
@@ -11,6 +14,7 @@ public class ServerReader extends Thread {
 
     private PrintWriter writer;
     private Scanner read;
+    private static final Logger LOGGER = LogManager.getLogger(ServerReader.class);
 
     public ServerReader (Scanner read, PrintWriter write) throws IOException {
         this.read = read;
@@ -23,6 +27,7 @@ public class ServerReader extends Thread {
             if (read.hasNextLine()) {
                 String inputLine = read.nextLine();
                 if (inputLine.equals("/end")) {
+                    LOGGER.info("end command");
                     break;
                 }
                 if (inputLine.contains("/auth")) {
@@ -32,12 +37,14 @@ public class ServerReader extends Thread {
                     if (auth(login, pass)) {
                         writer.println("Login success");
                         writer.flush();
+                        LOGGER.info("Login success");
                     } else {
                         writer.println("login failed!");
                         writer.flush();
+                        LOGGER.info("login failed!");
                     }
                 }
-                System.out.println("Client message : " + inputLine);
+                LOGGER.info("Client message : " + inputLine);
             }
         }
     }
